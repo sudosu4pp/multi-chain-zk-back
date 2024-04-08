@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/hex"
+	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
@@ -67,6 +68,7 @@ func (cs ClientState) Status(ctx sdk.Context, clientStore storetypes.KVStore, _ 
 	payload := QueryMsg{Status: &StatusMsg{}}
 	result, err := wasmQuery[StatusResult](ctx, clientStore, &cs, payload)
 	if err != nil {
+		fmt.Printf("QUERYING WASM CLIENT STATUS FAILED: ", err)
 		return exported.Unknown
 	}
 

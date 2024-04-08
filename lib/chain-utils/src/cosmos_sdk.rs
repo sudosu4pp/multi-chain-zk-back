@@ -146,7 +146,7 @@ pub trait CosmosSdkChainExt: CosmosSdkChain {
             body_bytes: tx::v1beta1::TxBody {
                 messages: messages.clone().into_iter().collect(),
                 // TODO(benluelo): What do we want to use as our memo?
-                memo: format!("Voyager ${}", env!("CARGO_PKG_VERSION")),
+                memo: format!("Voyager {}", env!("CARGO_PKG_VERSION")),
                 timeout_height: 123_123_123,
                 extension_options: vec![],
                 non_critical_extension_options: vec![],

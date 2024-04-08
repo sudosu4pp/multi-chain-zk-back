@@ -216,7 +216,7 @@ impl TryFrom<cosmwasm_std::Timestamp> for Timestamp {
                 .map_err(TryFromCosmwasmTimestampError::IntCast)?
                 .try_into()
                 .map_err(TryFromCosmwasmTimestampError::Seconds)?,
-            nanos: TryInto::<i32>::try_into(value.nanos())
+            nanos: TryInto::<i32>::try_into(value.subsec_nanos())
                 .map_err(TryFromCosmwasmTimestampError::IntCast)?
                 .try_into()
                 .map_err(TryFromCosmwasmTimestampError::Nanos)?,
@@ -419,5 +419,23 @@ mod tests {
                 })
             );
         }
+    }
+
+    #[test]
+    fn cosmwasm() {
+        let seconds = 1_712_534_755;
+        let nanos = 161_433_916;
+
+        let cw_ts = cosmwasm_std::Timestamp::from_nanos((seconds * 1_000_000_000) + nanos);
+
+        let ts = Timestamp::try_from(cw_ts).unwrap();
+
+        assert_eq!(
+            ts,
+            Timestamp {
+                seconds: (seconds as i64).try_into().unwrap(),
+                nanos: (nanos as i32).try_into().unwrap()
+            }
+        );
     }
 }

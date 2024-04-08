@@ -225,9 +225,6 @@ mod tests {
     use super::*;
     use crate::chain_impls::union::UnionFetch;
 
-    #[test]
-    fn sanity_check() {
-        static_assertions::assert_impl_all!(Union: DoFetchState<Union, Wasm<Cosmos>>);
-        static_assertions::assert_impl_all!(UnionFetch<Union, Wasm<Cosmos>>: DoFetch<Union>);
-    }
+    static_assertions::assert_impl_all!(Wasm<Union>: DoFetchState<Wasm<Union>, Wasm<Cosmos>>);
+    static_assertions::assert_impl_all!(UnionFetch<Wasm<Union>, Wasm<Cosmos>>: DoFetch<Wasm<Union>>);
 }

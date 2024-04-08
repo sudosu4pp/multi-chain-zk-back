@@ -252,12 +252,16 @@ impl HandleData<VoyagerMessageTypes> for VoyagerData {
                 )) => <VoyagerMessageTypes as FromQueueMsg<RelayMessageTypes>>::from_queue_msg(
                     match ibc_event.client_type {
                         unionlabs::ClientType::Wasm(unionlabs::WasmClientType::Cometbls) => {
-                            event::<RelayMessageTypes>(relay_message::id::<Wasm<Cosmos>, Union, _>(
+                            event::<RelayMessageTypes>(relay_message::id::<
+                                Wasm<Cosmos>,
+                                Wasm<Union>,
+                                _,
+                            >(
                                 chain_id,
                                 relay_message::event::IbcEvent {
                                     tx_hash: ibc_event.tx_hash,
                                     height: ibc_event.height,
-                                    event: chain_event_to_lc_event::<Wasm<Cosmos>, Union>(
+                                    event: chain_event_to_lc_event::<Wasm<Cosmos>, Wasm<Union>>(
                                         ibc_event.event,
                                     ),
                                 },
@@ -321,13 +325,13 @@ impl HandleData<VoyagerMessageTypes> for VoyagerData {
                                 },
                             ))
                         }
-                        unionlabs::ClientType::Tendermint => {
-                            event(relay_message::id::<Union, Wasm<Cosmos>, _>(
+                        unionlabs::ClientType::Wasm(unionlabs::WasmClientType::Tendermint) => {
+                            event(relay_message::id::<Wasm<Union>, Wasm<Cosmos>, _>(
                                 chain_id,
                                 relay_message::event::IbcEvent {
                                     tx_hash: ibc_event.tx_hash,
                                     height: ibc_event.height,
-                                    event: chain_event_to_lc_event::<Union, Wasm<Cosmos>>(
+                                    event: chain_event_to_lc_event::<Wasm<Union>, Wasm<Cosmos>>(
                                         ibc_event.event,
                                     ),
                                 },
@@ -916,7 +920,7 @@ mod tests {
         print_json::<RelayMessageTypes>(repeat(
             None,
             seq([
-                event(relay_message::id::<Wasm<Cosmos>, Union, _>(
+                event(relay_message::id::<Wasm<Cosmos>, Wasm<Union>, _>(
                     simd_chain_id.clone(),
                     relay_message::event::Command::UpdateClient {
                         client_id: parse!("08-wasm-0"),
@@ -933,7 +937,7 @@ mod tests {
         print_json::<RelayMessageTypes>(repeat(
             None,
             seq([
-                event(relay_message::id::<Union, Wasm<Cosmos>, _>(
+                event(relay_message::id::<Wasm<Union>, Wasm<Cosmos>, _>(
                     union_chain_id.clone(),
                     relay_message::event::Command::UpdateClient {
                         client_id: parse!("07-tendermint-0"),
@@ -1060,14 +1064,14 @@ mod tests {
         print_json::<RelayMessageTypes>(seq([
             aggregate(
                 [
-                    fetch(relay_message::id::<Wasm<Cosmos>, Union, _>(
+                    fetch(relay_message::id::<Wasm<Cosmos>, Wasm<Union>, _>(
                         simd_chain_id.clone(),
                         FetchSelfClientState {
                             at: QueryHeight::Latest,
                             __marker: PhantomData,
                         },
                     )),
-                    fetch(relay_message::id::<Wasm<Cosmos>, Union, _>(
+                    fetch(relay_message::id::<Wasm<Cosmos>, Wasm<Union>, _>(
                         simd_chain_id.clone(),
                         FetchSelfConsensusState {
                             at: QueryHeight::Latest,
@@ -1076,24 +1080,28 @@ mod tests {
                     )),
                 ],
                 [],
-                relay_message::id::<Union, Wasm<Cosmos>, _>(
+                relay_message::id::<Wasm<Union>, Wasm<Cosmos>, _>(
                     union_chain_id.clone(),
                     AggregateCreateClient {
-                        config: (),
+                        config: WasmConfig {
+                            checksum: H256(hex!(
+                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                            )),
+                        },
                         __marker: PhantomData,
                     },
                 ),
             ),
             aggregate(
                 [
-                    fetch(relay_message::id::<Union, Wasm<Cosmos>, _>(
+                    fetch(relay_message::id::<Wasm<Union>, Wasm<Cosmos>, _>(
                         union_chain_id.clone(),
                         FetchSelfClientState {
                             at: QueryHeight::Latest,
                             __marker: PhantomData,
                         },
                     )),
-                    fetch(relay_message::id::<Union, Wasm<Cosmos>, _>(
+                    fetch(relay_message::id::<Wasm<Union>, Wasm<Cosmos>, _>(
                         union_chain_id.clone(),
                         FetchSelfConsensusState {
                             at: QueryHeight::Latest,
@@ -1102,12 +1110,12 @@ mod tests {
                     )),
                 ],
                 [],
-                relay_message::id::<Wasm<Cosmos>, Union, _>(
+                relay_message::id::<Wasm<Cosmos>, Wasm<Union>, _>(
                     simd_chain_id,
                     AggregateCreateClient {
                         config: WasmConfig {
                             checksum: H256(hex!(
-                                "78266014ea77f3b785e45a33d1f8d3709444a076b3b38b2aeef265b39ad1e494"
+                                "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
                             )),
                         },
                         __marker: PhantomData,

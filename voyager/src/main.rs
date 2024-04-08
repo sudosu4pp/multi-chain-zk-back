@@ -200,8 +200,13 @@ async fn do_main(args: cli::AppArgs) -> Result<(), VoyagerError> {
                     let json = match (on, &tracking.ty) {
                         (AnyChain::Union(union), ChainConfigType::Cosmos(_)) => {
                             // NOTE: ChainSpec is arbitrary
-                            any_state_proof_to_json::<Union, Wasm<Cosmos>>(chains, path, union, at)
-                                .await
+                            any_state_proof_to_json::<Wasm<Union>, Wasm<Cosmos>>(
+                                chains,
+                                path,
+                                Wasm(union),
+                                at,
+                            )
+                            .await
                         }
                         (
                             AnyChain::Union(union),
@@ -244,7 +249,7 @@ async fn do_main(args: cli::AppArgs) -> Result<(), VoyagerError> {
                         }
                         (AnyChain::Cosmos(cosmos), ChainConfigType::Union(_)) => {
                             // NOTE: ChainSpec is arbitrary
-                            any_state_proof_to_json::<Wasm<Cosmos>, Union>(
+                            any_state_proof_to_json::<Wasm<Cosmos>, Wasm<Union>>(
                                 chains,
                                 path,
                                 Wasm(cosmos),

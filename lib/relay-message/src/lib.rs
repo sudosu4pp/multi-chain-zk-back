@@ -230,9 +230,9 @@ pub enum AnyLightClientIdentified<T: AnyLightClient> {
     UnionOnScroll(lc!(Wasm<Union> => Scroll)),
 
     /// The 08-wasm client tracking the state of Cosmos.
-    CosmosOnUnion(lc!(Wasm<Cosmos> => Union)),
+    CosmosOnUnion(lc!(Wasm<Cosmos> => Wasm<Union>)),
     /// The solidity client on Cosmos tracking the state of Wasm<Union>.
-    UnionOnCosmos(lc!(Union => Wasm<Cosmos>)),
+    UnionOnCosmos(lc!(Wasm<Union> => Wasm<Cosmos>)),
 
     /// The 08-wasm client tracking the state of Cosmos.
     CosmosOnCosmos(lc!(Cosmos => Cosmos)),
@@ -259,8 +259,9 @@ enum AnyLightClientIdentifiedSerde<T: AnyLightClient> {
     ScrollOnUnion(Inner<Wasm<Union>, Scroll, lc!(Scroll => Wasm<Union>)>),
     UnionOnScroll(Inner<Scroll, Wasm<Union>, lc!(Wasm<Union> => Scroll)>),
 
-    CosmosOnUnion(Inner<Union, Wasm<Cosmos>, lc!(Wasm<Cosmos> => Union)>),
-    UnionOnCosmos(Inner<Wasm<Cosmos>, Union, lc!(Union => Wasm<Cosmos>)>),
+    CosmosOnUnion(Inner<Union, Wasm<Cosmos>, lc!(Wasm<Cosmos> => Wasm<Union>)>),
+    UnionOnCosmos(Inner<Wasm<Cosmos>, Union, lc!(Wasm<Union> => Wasm<Cosmos>)>),
+
     CosmosOnCosmos(Inner<Cosmos, Cosmos, lc!(Cosmos => Cosmos)>),
 }
 
@@ -496,7 +497,7 @@ macro_rules! any_lc {
 
             AnyLightClientIdentified::CosmosOnUnion($msg) => {
                 #[allow(dead_code)]
-                type Hc = chain_utils::union::Union;
+                type Hc = chain_utils::wasm::Wasm<chain_utils::union::Union>;
                 #[allow(dead_code)]
                 type Tr = chain_utils::wasm::Wasm<chain_utils::cosmos::Cosmos>;
 
@@ -506,7 +507,7 @@ macro_rules! any_lc {
                 #[allow(dead_code)]
                 type Hc = chain_utils::wasm::Wasm<chain_utils::cosmos::Cosmos>;
                 #[allow(dead_code)]
-                type Tr = chain_utils::union::Union;
+                type Tr = chain_utils::wasm::Wasm<chain_utils::union::Union>;
 
                 $expr
             }
