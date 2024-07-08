@@ -1,0 +1,14 @@
+[package]
+edition      = { workspace = true }
+license-file = { workspace = true }
+name         = "voyager-plugin-sdk"
+repository   = { workspace = true }
+version      = "0.1.0"
+
+[lints]
+workspace = true
+
+[dependencies]
+jsonrpsee = { workspace = true, features = ["client", "full", "macros", "server"] }
+queue-msg       = { workspace = true }
+voyager-message = { workspace = true }

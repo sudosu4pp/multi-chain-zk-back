@@ -68,13 +68,16 @@ members = [
 
   "ucli",
   "unionvisor",
-  "voyager",
   "near/near-ibc",
   "near/near-light-client",
   "near/dummy-ibc-app",
   "near/near-ibc-tests",
 
+  "voyager",
+  "voyager/plugins/tx-batch",
+
   "drip",
+  "lib/voyager-plugin-sdk",
 ]
 
 [workspace.package]
@@ -171,6 +174,7 @@ futures                  = { version = "0.3.28", default-features = false }
 go-parse-duration        = { version = "0.1.1", default-features = false }
 hex                      = { version = "0.4.3", default-features = false }
 hex-literal              = { version = "0.4.1", default-features = false }
+jsonrpsee                = { version = "0.22.5", default-features = false }
 lazy_static              = { version = "1.4.0", default-features = false }
 near-contract-standards  = { version = "5.1.0", default-features = false }
 near-sdk                 = { version = "5.1.0", default-features = false }

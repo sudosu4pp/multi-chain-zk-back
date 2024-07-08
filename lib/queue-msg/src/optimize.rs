@@ -3,6 +3,7 @@ use std::{convert::Infallible, error::Error, fmt::Debug};
 use either::Either;
 use frame_support_procedural::{CloneNoBound, DebugNoBound};
 use futures::Future;
+use serde::{Deserialize, Serialize};
 
 use crate::{Op, QueueMessage};
 
@@ -31,7 +32,8 @@ pub trait PurePass<T: QueueMessage>: Debug + Clone + Send + Sync + Sized + 'stat
 /// The result of running an optimization pass. Both `optimize_further` and `ready` are lists of
 /// `(parents, msg)`, allowing for correlating new messages with multiple parents (i.e. combining
 /// messages).
-#[derive(DebugNoBound, CloneNoBound)]
+#[derive(DebugNoBound, CloneNoBound, Serialize, Deserialize)]
+#[serde(bound(serialize = "", deserialize = ""))]
 pub struct OptimizationResult<T: QueueMessage> {
     /// Messages that are considered incomplete by this optimization pass and are to be optimized
     /// further.

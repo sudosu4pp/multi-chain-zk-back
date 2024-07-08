@@ -10,7 +10,7 @@ workspace = true
 
 [dependencies]
 hex.workspace       = true
-jsonrpsee           = { version = "0.22.3", features = ["tracing", "ws-client"] }
+jsonrpsee           = { workspace = true, features = ["tracing", "ws-client"] }
 macros              = { workspace = true }
 protos.workspace    = true
 serde               = { workspace = true, features = ["derive"] }

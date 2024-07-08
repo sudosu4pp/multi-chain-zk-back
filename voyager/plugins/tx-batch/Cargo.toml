@@ -1,0 +1,15 @@
+[package]
+name = "voyager-plugin-tx-batch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chain-utils.workspace = true
+itertools = "0.13.0"
+queue-msg.workspace = true
+relay-message.workspace = true
+serde = { workspace = true, features = ["derive"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true
+unionlabs.workspace = true
+voyager-message.workspace = true
