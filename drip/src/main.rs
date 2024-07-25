@@ -46,6 +46,8 @@ async fn main() {
         }
     }
 
+    let laddr = config.laddr.clone();
+
     let secret = config.secret.clone().map(CaptchaSecret);
 
     let pool = PoolBuilder::new()
@@ -211,7 +213,7 @@ async fn main() {
     let router = Router::new().route("/", get(graphiql).post_service(GraphQL::new(schema)));
 
     info!("starting server");
-    axum::serve(TcpListener::bind("0.0.0.0:8000").await.unwrap(), router)
+    axum::serve(TcpListener::bind(laddr).await.unwrap(), router)
         .await
         .unwrap();
 }
@@ -263,6 +265,7 @@ pub struct Config {
     pub amount: u64,
     pub max_request_polls: u32,
     pub memo: String,
+    pub laddr: String,
 }
 
 pub struct MaxRequestPolls(pub u32);
