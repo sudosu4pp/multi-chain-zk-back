@@ -17,7 +17,7 @@ use prost::{Message, Name};
 use serde::{Deserialize, Serialize};
 use tendermint_rpc::{Client, WebSocketClient, WebSocketClientUrl};
 use tokio::net::TcpListener;
-use tracing::{debug, error, info, warn};
+use tracing::{debug, error, info, instrument, warn};
 use tracing_subscriber::EnvFilter;
 use unionlabs::{hash::H256, signer::CosmosSigner, ErrorReporter};
 
@@ -403,6 +403,7 @@ pub struct CaptchaSecret(pub String);
 
 #[Object]
 impl Mutation {
+    #[instrument(skip(self, ctx))]
     async fn send<'ctx>(
         &self,
         ctx: &Context<'ctx>,
@@ -423,6 +424,8 @@ impl Mutation {
                 recaptcha_verify::verify(&secret.0, &captcha_token, None)
                     .await
                     .map_err(|err| format!("failed to verify captcha: {:?}", err))?;
+            } else {
+                info!("bypassing captcha verification")
             }
         }
 
@@ -472,6 +475,8 @@ impl Mutation {
                 tokio::time::sleep(std::time::Duration::from_secs(1)).await;
             }
         };
+
+        info!(%tx_hash, "fulfilled request");
 
         Ok(tx_hash)
     }
