@@ -28,6 +28,10 @@ const menuSections = [
       {
         url: "https://research.union.build",
         name: "Research"
+      },
+      {
+        url: "https://drive.google.com/drive/folders/1_cpxa5FZXjVuuF1V8f-0dLO6VE337gHC",
+        name: "Brand kit"
       }
       // {
       //   url: "https://github.com/unionlabs/whitepaper",
@@ -77,34 +81,34 @@ function isInternal(menuItem: { url: string }): boolean {
 ---
 
 <footer
-  class="bg-neutral-950 border-t-2 border-neutral-800 font-jetbrains justify-center flex flex-col font-normal items-center gap-4 p-4 mt-16"
+        class="bg-neutral-950 border-t-2 border-neutral-800 font-jetbrains justify-center flex flex-col font-normal items-center gap-4 p-4 mt-16"
 >
   <ul class="grid grid-cols-2 sm:grid-cols-4 gap-12 list-none py-4">
     {
       menuSections.map((menuSection) => (
-        <li>
-          <h3 class="font-supermolot text-lg font-bold uppercase !m-0 !p-0">
-            {menuSection.title}
-          </h3>
-          {menuSection.items.map((menuItem) => (
-            <div>
-              <a
-                href={menuItem.url}
-                target={isInternal(menuItem) ? "" : "_blank"}
-                rel={isInternal(menuItem) ? "" : "noopener noreferrer"}
-                class="text-normal !text-white !no-underline"
-              >
-                {menuItem.name}
-              </a>
-            </div>
-          ))}
-        </li>
+              <li>
+                <h3 class="font-supermolot text-lg font-bold uppercase !m-0 !p-0">
+                  {menuSection.title}
+                </h3>
+                {menuSection.items.map((menuItem) => (
+                        <div>
+                          <a
+                                  href={menuItem.url}
+                                  target={isInternal(menuItem) ? "" : "_blank"}
+                                  rel={isInternal(menuItem) ? "" : "noopener noreferrer"}
+                                  class="text-normal !text-white !no-underline"
+                          >
+                            {menuItem.name}
+                          </a>
+                        </div>
+                ))}
+              </li>
       ))
     }
   </ul>
 
   <p class="text-center block font-bold mt-4 font-supermolot text-accent-500">
-    <BlinkWhale />
+    <BlinkWhale/>
   </p>
   <p class="text-center font-supermolot font-bold block text-neutral-500 my-4">
     &copy; Union Labs
