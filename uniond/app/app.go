@@ -288,6 +288,10 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	if err := app.Load(loadLatest); err != nil {
+		return nil, err
+	}
+
 	if loadLatest {
 		ctx := app.BaseApp.NewUncachedContext(true, tmproto.Header{})
 
@@ -295,10 +299,6 @@ func New(
 		if err := app.WasmKeeper.InitializePinnedCodes(ctx); err != nil {
 			panic(fmt.Sprintf("failed initialize pinned codes %s", err))
 		}
-	}
-
-	if err := app.Load(loadLatest); err != nil {
-		return nil, err
 	}
 
 	return app, nil
