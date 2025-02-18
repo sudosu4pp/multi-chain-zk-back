@@ -4,11 +4,11 @@
 // Parameters
 
 // Licensor:             Union.fi, Labs Inc.
-// Licensed Work:        All files under https://github.com/unionlabs/union's aptos subdirectory                      
+// Licensed Work:        All files under https://github.com/unionlabs/union's aptos subdirectory
 //                       The Licensed Work is (c) 2024 Union.fi, Labs Inc.
 // Change Date:          Four years from the date the Licensed Work is published.
 // Change License:       Apache-2.0
-// 
+//
 
 // For information about alternative licensing arrangements for the Licensed Work,
 // please contact info@union.build.
@@ -118,7 +118,9 @@ module ibc::acknowledge_packet {
                 destination_channel,
                 commitment::commit_packet(&first_packet)
             );
-            commitment_value = commitment::commit_ack(*vector::borrow(&acknowledgements, 0));
+            commitment_value = commitment::commit_ack(
+                *vector::borrow(&acknowledgements, 0)
+            );
         } else {
             commitment_key = commitment::batch_receipts_commitment_key(
                 destination_channel,
@@ -152,7 +154,8 @@ module ibc::acknowledge_packet {
             let acknowledgement = *vector::borrow(&acknowledgements, i);
             // onAcknowledgementPacket(...)
 
-            let param = helpers::pack_acknowledge_packet_params(packet, acknowledgement, @ibc);
+            let param =
+                helpers::pack_acknowledge_packet_params(packet, acknowledgement, @ibc);
             engine::dispatch<T>(param);
 
             dispatcher::delete_storage<T>();
@@ -163,4 +166,3 @@ module ibc::acknowledge_packet {
         }
     }
 }
-
